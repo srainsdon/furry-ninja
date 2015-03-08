@@ -1,0 +1,8 @@
+[site]
+title="Simple Perl Gallery"
+author=srainsdon
+
+[mysql]  
+dsn="dbi:mysql:<ImageDB>;host=<DBHost>"
+user=<DBUser>
+password=<DBPassword>

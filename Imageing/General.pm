@@ -9,10 +9,13 @@ use DBI;
 my $VERSION     = 1.00;
 my @ISA         = qw(Exporter);
 my @EXPORT      = ();
-my @EXPORT_OK   = qw(&new &getImageList);
-my %EXPORT_TAGS = ( DEFAULT => [qw(&new &getImageList)],
+my @EXPORT_OK   = qw(&new &getImageList &getTitle);
+my %EXPORT_TAGS = ( DEFAULT => [qw(&new &getImageList &getTitle)],
                  Both    => [qw(&new &func2)]);
 
+use Log::Log4perl;
+
+our $logger;
 our $cfg;
 our $author;
 our $title;
@@ -33,10 +36,10 @@ sub new
         _configfile => shift,
     };
     $cfg = new Config::Simple("$self->{_configfile}");
-    #print "Config File is $self->{_configfile}\n";
+    Log::Log4perl::init($cfg->param("config.logging"));
+	$logger = Log::Log4perl->get_logger('General');
+	$logger->debug("Logging Started:");
     setupDB();
-    # Print all the values just for clarification.
-    #print "Site Info:\nAuthor: $author\nTitle: $title\n";
     bless $self, $class;
     return $self;
 }
@@ -56,6 +59,7 @@ sub getImageList
 	my $sth = $dbh->prepare("SELECT * FROM Image");
 	$sth->execute();
 	my $numRows = $sth->rows;
+	$logger->debug("Rows Selected: $numRows");
 	my $x = 0;
 	my @DBInfo;
 	while ($x < $numRows)

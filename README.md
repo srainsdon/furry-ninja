@@ -24,4 +24,7 @@ author=srainsdon
 dsn="dbi:mysql:<ImageDB>;host=<DBHost>"
 user=<DBUser>
 password=<DBPassword>
+
+[config]
+logging=logging.conf
 ```
